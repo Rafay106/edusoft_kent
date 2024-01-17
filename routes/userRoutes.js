@@ -1,30 +1,6 @@
 const router = require("express").Router();
-const { User } = require("../models/allModels");
+const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-
-// Implement registration
-router.post("/register", async (req, res) => {
-  const { email, password, name, mobile, type } = req.body;
-
-  // Check if user already exists
-  if (await User.exists({ email })) {
-    return res
-      .status(409)
-      .json({ message: "Email already taken", success: false });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await User.create({
-    email,
-    password: hashedPassword,
-    mobile,
-    name,
-    type,
-  });
-
-  res.status(201).json({ message: "User created", success: true });
-});
 
 router.post("/mobile/change-password", async (req, res) => {
   const { id, currentPassword, newPassword } = req.body;

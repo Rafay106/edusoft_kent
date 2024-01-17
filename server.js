@@ -15,6 +15,7 @@ const SERVICE = require("./utils/services");
 const { LoadModels } = require("./utils/fn_common");
 const { errorHandler } = require("./middlewares/errorMiddleware");
 const { protect } = require("./middlewares/authMiddleware");
+const asyncHandler = require("express-async-handler");
 
 const app = express();
 
@@ -56,6 +57,19 @@ cron.schedule("*/10 * * * * *", () => {
 
 faceapi.env.monkeyPatch({ Canvas, Image });
 LoadModels();
+
+app.use("/login", require("./routes/loginRoutes"));
+app.use("/admin-panel", require("./routes/adminPanel/adminPanelRoutes.js"));
+app.use("/", require("./routes/employeeRoutes.js"));
+// app.use("/", require("./routes/staffRoutes.js"));
+// app.use("/", require("./routes/departmentRoutes.js"));
+
+app.all(
+  "*",
+  asyncHandler((req, res) => {
+    throw new Error("Not Found");
+  })
+);
 
 app.use(errorHandler);
 app.listen(PORT, () =>

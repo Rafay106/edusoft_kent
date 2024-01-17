@@ -1,5 +1,13 @@
+const ERROR = require("../constants/errorConstants");
+
 const errorHandler = (err, req, res, next) => {
   console.log("Custom Error Handler:", err);
+
+  const errObj = {
+    error: err.message || ERROR.SWW,
+    success: false,
+    stack: process.env.NODE_ENV === "production" ? null : err.stack.split("\n"),
+  };
 
   // if (process.env.NODE_ENV === "development") {
   //   devErrors(res, err);
@@ -9,27 +17,28 @@ const errorHandler = (err, req, res, next) => {
   // }
 
   if (err.name === "ValidationError") {
-    const message = Object.values(err.errors).map((value) => value.message);
-    return res.status(400).json({
-      error: message,
-    });
+    const message = Object.values(err.errors).map((value) =>
+      value.message.replace("%FIELD%", value.path)
+    );
+
+    errObj.error = message;
+    return res.status(400).json(errObj);
   }
+
+  // Duplicate Key Error
   if (err.name === "MongoServerError" && err.code === 11000) {
     const message = Object.keys(err.keyValue).map(
       (key) => `${key}: ${err.keyValue[key]} already exists!`
     );
-    return res.status(400).json({
-      error: message,
-    });
+
+    errObj.error = message;
+
+    return res.status(409).json(errObj);
   }
 
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  const errMsg = err.message || "Something went wrong";
 
-  res.status(statusCode).json({
-    message: errMsg,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack.split("\n"),
-  });
+  res.status(statusCode).json(errObj);
 };
 
 module.exports = { errorHandler };

@@ -74,21 +74,38 @@ const getDescriptorsFromDB = async (image) => {
   return results;
 };
 
-// Middleware for authenticating JWT
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Unauthorized" });
+const createSearchQuery = (fields, value) => {
+  const query = { $or: [] };
+
+  for (const field of fields) {
+    query.$or.push({
+      ["$expr"]: {
+        $regexMatch: {
+          input: { $toString: `$${field}` },
+          regex: new RegExp(value, "i"),
+        },
+      },
+    });
   }
-  jwt.verify(token, secret, (err, user) => {
-    if (err) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    req.user = user;
-    req.userID = user.email;
-    next();
-  });
+
+  return query;
+};
+
+const paginatedQuery = async (Model, query, select, page, limit, sort) => {
+  const total = await Model.countDocuments(query);
+  const pages = Math.ceil(total / limit) || 1;
+  if (page > pages) page = pages;
+  const startIdx = (page - 1) * limit;
+  const results = { total: total, pages, page, result: [] };
+
+  results.result = await Model.find(query)
+    .select(select)
+    .skip(startIdx)
+    .limit(limit)
+    .sort(sort)
+    .lean();
+
+  return results;
 };
 
 module.exports = {
@@ -96,5 +113,6 @@ module.exports = {
   LoadModels,
   uploadLabeledImages,
   getDescriptorsFromDB,
-  authenticateToken,
+  createSearchQuery,
+  paginatedQuery,
 };

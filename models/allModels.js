@@ -1,12 +1,5 @@
 const mongoose = require("mongoose");
-
-const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  name: String,
-  mobile: String,
-  type: String,
-});
+const SERVER = require("../constants/serverConstants");
 
 const deviceSchema = new mongoose.Schema({
   userID: {
@@ -329,7 +322,6 @@ const parentSchema = new mongoose.Schema({
 // });
 
 module.exports = {
-  User: mongoose.model("users", userSchema),
   Location: mongoose.model("locations", locationSchema),
   Company: mongoose.model("companies", companySchema),
   Department: mongoose.model("departments", departmentSchema),
