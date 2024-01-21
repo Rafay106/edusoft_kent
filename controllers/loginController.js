@@ -10,7 +10,7 @@ const login = asyncHandler(async (req, res) => {
 
   if (!email) {
     res.status(400);
-    throw new Error(ERROR.EMAIL_REQ);
+    throw new Error(ERROR.IR.EMAIL);
   }
 
   if (!password) {
@@ -32,7 +32,7 @@ const login = asyncHandler(async (req, res) => {
 
   res.status(200).json({
     message: RES.LOGGED_IN,
-    token: generateToken({ email: user.email }),
+    token: generateToken({ _id: user._id }),
     success: true,
     type: user.privileges.type,
   });
@@ -43,7 +43,7 @@ const mobileLogin = asyncHandler(async (req, res) => {
 
   if (!email) {
     res.status(400);
-    throw new Error(ERROR.EMAIL_REQ);
+    throw new Error(ERROR.IR.EMAIL);
   }
 
   if (!password) {

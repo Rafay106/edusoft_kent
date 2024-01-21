@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const SERVER = require("../constants/serverConstants");
+const ERROR = require("../constants/errorConstants");
 
 const deviceSchema = new mongoose.Schema({
   userID: {
@@ -18,23 +18,6 @@ const deviceSchema = new mongoose.Schema({
   status: { type: String, default: "Not Charging" },
   level: { type: String, default: "0" },
   gsm: { type: String },
-});
-
-const locationSchema = new mongoose.Schema({
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  name: { type: String, required: true },
-  address: { type: String, required: true },
-  country: { type: String, required: true },
-  state: { type: String, required: true },
-  city: { type: String, required: true },
-  pincode: { type: String, required: true },
-  userID: { type: String, required: true },
-  latitude: { type: Number, required: true },
-  longitude: { type: Number, required: true },
 });
 
 const busTrackSchema = new mongoose.Schema({
@@ -60,88 +43,6 @@ const busTrackSchema = new mongoose.Schema({
   status: { type: String, default: "Not Charging" },
   level: { type: String, default: "0" },
   gsm: { type: String },
-});
-
-const companySchema = new mongoose.Schema({
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  name: { type: String, required: true },
-  location: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  userID: { type: String, required: true },
-});
-
-const departmentSchema = new mongoose.Schema({
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  company: { type: String, required: true },
-  name: { type: String, required: true },
-});
-
-const designationSchema = new mongoose.Schema({
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  department: { type: String, required: true },
-  name: { type: String, required: true },
-});
-
-const employeeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  phone: { type: String, required: true },
-  email: { type: String, required: true },
-  joining: { type: Date, required: true },
-  rfidID: { type: String, default: "" },
-  route: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "routes",
-  },
-  department: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "departments",
-  },
-  designation: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "designations",
-  },
-  parent: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "parents",
-  },
-  bus: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "buses",
-  },
-  device: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "devices",
-  },
-  userID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
-    required: true,
-  },
-  adhaarNo: { type: String },
-  admissionNo: { type: String, required: true },
-  gender: { type: String },
-  birth: { type: String },
-  photoUrl: { type: String },
-  numbers: [Number],
 });
 
 const attendanceSchema = new mongoose.Schema({
@@ -322,11 +223,6 @@ const parentSchema = new mongoose.Schema({
 // });
 
 module.exports = {
-  Location: mongoose.model("locations", locationSchema),
-  Company: mongoose.model("companies", companySchema),
-  Department: mongoose.model("departments", departmentSchema),
-  Designation: mongoose.model("designations", designationSchema),
-  Employee: mongoose.model("employees", employeeSchema),
   Attendance: mongoose.model("attendances", attendanceSchema),
   FaceModel: mongoose.model("faces", faceSchema),
   Device: mongoose.model("devices", deviceSchema),

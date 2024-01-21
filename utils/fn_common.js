@@ -108,6 +108,15 @@ const paginatedQuery = async (Model, query, select, page, limit, sort) => {
   return results;
 };
 
+const removeDuplicateFromArray = (array) => {
+  const dict = {};
+  for (const ele of array) {
+    dict[ele] = true;
+  }
+
+  return Object.keys(dict);
+};
+
 module.exports = {
   getRootDir,
   LoadModels,
@@ -115,4 +124,5 @@ module.exports = {
   getDescriptorsFromDB,
   createSearchQuery,
   paginatedQuery,
+  removeDuplicateFromArray,
 };

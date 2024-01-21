@@ -50,12 +50,15 @@ const getUser = asyncHandler(async (req, res) => {
 
   if (!user) {
     res.status(404);
-    throw new Error(ERROR.NF);
+    throw new Error(ERROR.NF_ID.USER.replace("%id%", req.params.id));
   }
 
   res.status(200).json({ user, success: true });
 });
 
+// @desc    Add a user
+// @route   POST /admin-panel/user
+// @access  Private
 const registerUser = asyncHandler(async (req, res) => {
   const { email, password, name, mobile, role, level } = req.body;
 
@@ -72,7 +75,41 @@ const registerUser = asyncHandler(async (req, res) => {
     role,
   });
 
-  res.status(201).json({ message: RES.USER_CREATED, success: true });
+  res.status(201).json({ msg: user._id, success: true });
 });
 
-module.exports = { getUsers, getUser, registerUser };
+// @desc    Update a user
+// @route   PATCH /admin-panel/user/:id
+// @access  Private
+const updateUser = asyncHandler(async (req, res) => {
+  const { email, name, mobile, role } = req.body;
+
+  if (name?.first === "") name.first = undefined;
+  if (name?.last === "") name.last = undefined;
+
+  await User.updateOne(
+    { _id: req.params.id },
+    {
+      email,
+      email_verified: email ? false : undefined,
+      "name.first": name?.first,
+      "name.mid": name?.mid,
+      "name.last": name?.last,
+      mobile,
+      role,
+    }
+  );
+
+  res.status(200).json({ success: true });
+});
+
+// @desc    Delete a user
+// @route   DELETE /admin-panel/user/:id
+// @access  Private
+const deleteUser = asyncHandler(async (req, res) => {
+  await User.deleteOne({ _id: req.params.id });
+
+  res.status(200).json({ success: true });
+});
+
+module.exports = { getUsers, getUser, registerUser, updateUser, deleteUser };

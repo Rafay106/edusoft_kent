@@ -16,6 +16,7 @@ const { LoadModels } = require("./utils/fn_common");
 const { errorHandler } = require("./middlewares/errorMiddleware");
 const { protect } = require("./middlewares/authMiddleware");
 const asyncHandler = require("express-async-handler");
+const { authenticateToken } = require("./utils/fn_jwt.js");
 
 const app = express();
 
@@ -60,9 +61,8 @@ LoadModels();
 
 app.use("/login", require("./routes/loginRoutes"));
 app.use("/admin-panel", require("./routes/adminPanel/adminPanelRoutes.js"));
+app.use("/master-data", protect, require("./routes/masterDataRoutes.js"));
 app.use("/", require("./routes/employeeRoutes.js"));
-// app.use("/", require("./routes/staffRoutes.js"));
-// app.use("/", require("./routes/departmentRoutes.js"));
 
 app.all(
   "*",

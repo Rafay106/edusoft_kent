@@ -1,3 +1,5 @@
+const { Staff } = require("../models/allModels");
+
 const router = require("express").Router();
 
 // Create a new staff member

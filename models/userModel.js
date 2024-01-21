@@ -7,7 +7,7 @@ const privilegesSchema = new mongoose.Schema(
   {
     level: {
       type: String,
-      required: [true, ERROR.IS_REQ],
+      required: [true, ERROR.IR.FIELD],
       enum: {
         values: [SERVER.SUPER_ADMIN, SERVER.ADMIN, SERVER.MANAGER, SERVER.USER],
         message: ERROR.VALUE_NOT_SUPPORTED,
@@ -19,14 +19,18 @@ const privilegesSchema = new mongoose.Schema(
 
 const userSchema = new mongoose.Schema(
   {
-    email: { type: String, required: [true, ERROR.IS_REQ] },
+    email: { type: String, required: [true, ERROR.IR.FIELD] },
     email_verified: { type: Boolean, default: false },
-    password: { type: String, required: [true, ERROR.IS_REQ] },
-    name: { type: String, required: [true, ERROR.IS_REQ] },
-    mobile: { type: String, required: [true, ERROR.IS_REQ] },
+    password: { type: String, required: [true, ERROR.IR.FIELD] },
+    name: {
+      first: { type: String, required: [true, ERROR.IR.FIELD] },
+      mid: { type: String, default: "" },
+      last: { type: String, required: [true, ERROR.IR.FIELD] },
+    },
+    mobile: { type: String, required: [true, ERROR.IR.FIELD] },
     role: {
       type: String,
-      required: [true, ERROR.IS_REQ],
+      required: [true, ERROR.IR.FIELD],
       enum: {
         values: [SERVER.ADMIN, SERVER.EMPLOYEE, SERVER.PARENT],
         message: ERROR.VALUE_NOT_SUPPORTED,

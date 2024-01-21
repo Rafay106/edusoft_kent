@@ -9,10 +9,10 @@ const employeeUnitSchema = new mongoose.Schema(
         values: ["employee", "mobile"],
         message: ERROR.VALUE_NOT_SUPPORTED,
       },
-      required: [true, ERROR.IS_REQ],
+      required: [true, ERROR.IR.FIELD],
     },
-    qty: { type: Number, required: [true, ERROR.IS_REQ] },
-    price: { type: Number, required: [true, ERROR.IS_REQ] },
+    qty: { type: Number, required: [true, ERROR.IR.FIELD] },
+    price: { type: Number, required: [true, ERROR.IR.FIELD] },
   },
   { versionKey: false }
 );
@@ -21,7 +21,7 @@ const subsPlanSchema = new mongoose.Schema({
   manager: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
-    required: [true, ERROR.IS_REQ],
+    required: [true, ERROR.IR.FIELD],
   },
   type: {
     type: String,
@@ -29,26 +29,26 @@ const subsPlanSchema = new mongoose.Schema({
       values: ["b", "a"], // b: basic | a: advance
       message: "{VALUE} is not supported!",
     },
-    required: [true, ERROR.IS_REQ],
+    required: [true, ERROR.IR.FIELD],
   },
-  startDate: { type: Date, required: [true, ERROR.IS_REQ] },
-  endDate: { type: Date, required: [true, ERROR.IS_REQ] },
-  renewDate: { type: Date, required: [true, ERROR.IS_REQ] },
+  startDate: { type: Date, required: [true, ERROR.IR.FIELD] },
+  endDate: { type: Date, required: [true, ERROR.IR.FIELD] },
+  renewDate: { type: Date, required: [true, ERROR.IR.FIELD] },
   payCycle: {
     type: String,
     enum: {
       values: ["m", "y"], // m: monthly | y: yearly
       message: "{VALUE} is not supported!",
     },
-    required: [true, ERROR.IS_REQ],
+    required: [true, ERROR.IR.FIELD],
   },
   employee: {
-    units: { type: Number, require: [true, ERROR.IS_REQ] },
-    qty: { type: Number, require: [true, ERROR.IS_REQ] },
+    units: { type: Number, require: [true, ERROR.IR.FIELD] },
+    qty: { type: Number, require: [true, ERROR.IR.FIELD] },
   },
   mobile: {
-    units: { type: Number, require: [true, ERROR.IS_REQ] },
-    qty: { type: Number, require: [true, ERROR.IS_REQ] },
+    units: { type: Number, require: [true, ERROR.IR.FIELD] },
+    qty: { type: Number, require: [true, ERROR.IR.FIELD] },
   },
 });
 
